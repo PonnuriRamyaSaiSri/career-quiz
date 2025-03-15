@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Compass - Career Results</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center;
+            background-image: url('background-pattern.png');
+            background-repeat: repeat;
+            background-size: contain;
+            color: black;
+        }
+        .container { 
+            width: 60%; 
+            margin: auto; 
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: darkblue;
+        }
+        .result {
+            font-size: 20px;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #333;
+        }
+        .retake {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background: orange;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .retake:hover {
+            background: darkorange;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Top 3 Career Recommendations</h2>
+        <div id="careerResults"></div>
+        <a href="quiz.html" class="retake">Retake Quiz</a>
+    </div>
+
+    <script>
+        // Improved mapping of answers to multiple career fields
+        const careerCategories = {
+            "Solving problems": ["Software Engineer", "Data Analyst"],
+            "Helping others": ["Doctor", "Social Worker"],
+            "Creating new things": ["Fashion Designer", "Graphic Designer"],
+            "Managing people": ["Entrepreneur", "Project Manager"],
+            "Office": ["Software Engineer", "Financial Analyst"],
+            "Hospital": ["Doctor", "Pharmacist"],
+            "Studio": ["Fashion Designer", "Interior Designer"],
+            "Business setup": ["Entrepreneur", "Marketing Manager"],
+            "Math": ["Software Engineer", "Statistician"],
+            "Biology": ["Doctor", "Biotechnologist"],
+            "Art": ["Fashion Designer", "Animator"],
+            "Economics": ["Entrepreneur", "Economist"],
+            "By solving puzzles": ["Software Engineer", "Cybersecurity Analyst"],
+            "By observing and understanding": ["Doctor", "Psychologist"],
+            "By experimenting and trying new ideas": ["Fashion Designer", "Scientist"],
+            "By discussing and debating": ["Entrepreneur", "Lawyer"],
+            "Building something useful": ["Software Engineer", "Civil Engineer"],
+            "Researching about health": ["Doctor", "Medical Researcher"],
+            "Designing and sketching": ["Fashion Designer", "Architect"],
+            "Making business strategies": ["Entrepreneur", "Business Consultant"],
+            "Coding or solving logical problems": ["Software Engineer", "Game Developer"],
+            "Reading about psychology or medicine": ["Doctor", "Therapist"],
+            "Painting, designing, or crafting": ["Fashion Designer", "Illustrator"],
+            "Watching business and marketing strategies": ["Entrepreneur", "Advertising Manager"],
+            "Logical and technical decisions": ["Software Engineer", "AI Engineer"],
+            "Helping others with advice": ["Doctor", "Life Coach"],
+            "Choosing colors, designs, and styles": ["Fashion Designer", "UI/UX Designer"],
+            "Business investment and planning": ["Entrepreneur", "Investment Banker"]
+        };
+
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            let careerScores = {};
+
+            // Process user selections
+            for (let [key, value] of params.entries()) {
+                let careers = careerCategories[value];
+                if (careers) {
+                    careers.forEach(career => {
+                        careerScores[career] = (careerScores[career] || 0) + 1;
+                    });
+                }
+            }
+
+            // Convert scores to array, sort by score, and get top 3
+            return Object.entries(careerScores)
+                .sort((a, b) => b[1] - a[1]) // Sort highest score first
+                .slice(0, 3) // Take top 3 careers
+                .map(([career]) => career); // Extract career names
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById("careerResults");
+            let topCareers = getQueryParams();
+
+            if (topCareers.length === 0) {
+                resultsDiv.innerHTML = "<p>Please complete the quiz to get career recommendations.</p>";
+            } else {
+                resultsDiv.innerHTML = topCareers.map(career => `<p class="result">${career}</p>`).join("");
+            }
+        }
+
+        displayResults();
+    </script>
+</body>
+</html>
